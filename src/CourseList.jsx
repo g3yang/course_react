@@ -20,6 +20,18 @@ class CourseList extends Component{
        });
     }
 
+    handleDelete(id){
+        axios.delete(`http://localhost:3001/courses/${id}`).then(res=>{
+           let courses = this.state.courses;
+           const newCourses = courses.filter(c=>c._id !== id);
+           this.setState({
+               courses:newCourses
+           });
+        })
+    }
+
+    
+
     render(){
         return (
             <div className="course-list">
@@ -30,7 +42,7 @@ class CourseList extends Component{
                             <span className="glyphicon glyphicon-ok icon" aria-hidden="true">
                             </span>
                             {course.title}
-                            <button type="button" className="close">&times;</button>
+                            <button type="button" className="close" onClick={this.handleDelete.bind(this,course._id)}>&times;</button>
                         </li>
                     ))
                 }        

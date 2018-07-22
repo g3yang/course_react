@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {FormGroup, FormControl, ControlLabel, Form, Button} from 'react-bootstrap';
-
+import axios from 'axios';
+import {browserHistory} from 'react-router';
+import {Link} from 'react-router-dom';
 
 class AddCourse extends Component{
     constructor(props){
@@ -33,29 +35,38 @@ class AddCourse extends Component{
     }
 
     handleSubmit(){
-        console.log('Submitting');
+        const newCourse = {
+            title: this.state.title,
+            description: this.state.description,
+            hours: this.state.hours,
+            price: this.state.price
+        };
+        axios.post('http://localhost:3001/courses', newCourse)
+            .then(res=>{
+                        this.props.history.push('/');
+            });
     }
 
     render(){
         return (
-            <form className="add-course" onSubmit={this.handleSubmit.bind(this)}>
+            <form className="add-course">
                 <FormGroup>
                     <ControlLabel>Title</ControlLabel>
                     <FormControl type="text" onChange={this.handleTitleChange.bind(this)}/>
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Description</ControlLabel>
-                    <FormControl componentClass="textarea" />
+                    <FormControl componentClass="textarea" onChange={this.handleDescriptionChange.bind(this)} />
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Price</ControlLabel>
-                    <FormControl type="text" />
+                    <FormControl type="text" onChange={this.handlePriceChange.bind(this)} />
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Hours</ControlLabel>
-                    <FormControl type="text" />
+                    <FormControl type="text" onChange={this.handleHoursChange.bind(this)}/>
                 </FormGroup>
-                <Button type="submit"> Add </Button>
+                <Button onClick={this.handleSubmit.bind(this)}> Add </Button>
             </form>
         )
     }
